@@ -7,7 +7,7 @@
   https://codeformatsudo.github.io/omatsuri_project/
 		
 ## Variation Demo
-  https://codeformatsudo.github.io/omaturi_project_demo/
+  https://codeformatsudo.github.io/omatsuri_project_demo/
 
 ## Usage
 ### GitHub Pagesでサイトを公開する
