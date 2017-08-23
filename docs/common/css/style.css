@@ -249,6 +249,11 @@ section div
     color: #fff;
 }
 
+table
+{
+    width: 100%;
+}
+
 .table-small
 {
     display: none;
