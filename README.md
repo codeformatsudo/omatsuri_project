@@ -4,7 +4,7 @@
 　　dataのcsvを入れ替えるだけで簡単にページが作成できます。
 
 ## Demo
-  https://codeformatsudo.github.io/omaturi_project/
+  https://codeformatsudo.github.io/omatsuri_project/
 		
 ## Variation Demo
   https://codeformatsudo.github.io/omaturi_project_demo/
