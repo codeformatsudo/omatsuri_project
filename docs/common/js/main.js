@@ -6,7 +6,7 @@
 	/*--twitterウィジェット--*/
 
 	$.ajax({
-		url: 'data/info.txt',
+		url: 'data/twitterWidget.txt',
 		timeout: 1000,
 		success: function (data) {
 
@@ -39,11 +39,12 @@
 
 		var twitterButton = document.querySelector('.twitter-button');
 
-		twitterButton.style.top = windowH - 90 + 'px';
+		twitterButton.style.top = 100 + 'px';
 	}
 	$(window).on('load resize orientationchange', function () {
 		leftButton();
 	});
+
 	/*--mmenu設定--*/
 	$("#leftSlidebar").mmenu({
 		slidingSubmenus: false,
@@ -58,9 +59,9 @@
 
 	/*-----注意案内の作成-----*/
 	//注意文の読み込み
-	/*
+
 	$.ajax({
-		url: 'data/info.txt',
+		url: 'data/textInformation.txt',
 		timeout: 1000,
 		success: function (data) {
 			console.log(data)
@@ -105,7 +106,7 @@
 	function scrollInfo() {
 		fixContent.style.top = windowH + scrollTop + 70 - fixH + 'px';
 	}
-/*
+
 	/*--headerの縮小--*/
 	// スクロールして何ピクセルでアニメーションさせるか
 	var px_change = 300;
