@@ -3,29 +3,6 @@
 
 	var windowW = window.innerWidth || document.documentElement.clientWidth;
 
-	/*--twitterウィジェット--*/
-
-	$.ajax({
-		url: 'data/twitterWidget.txt',
-		timeout: 1000,
-		success: function (data) {
-
-			if (data.length === 0) {
-				$('.twitter-button').css({
-					'display': 'none'
-				})
-			} else {
-				var twitterWidget = $('.twitter-widget').html(data);
-
-
-			}
-		},
-		error: function () {
-			alert("Twitterの取得に失敗しました");
-		}
-	});
-
-
 	/*--smaoothScrollの設定--*/
 	smoothScroll.init({
 		speed: 800,
@@ -33,12 +10,31 @@
 		easing: 'easeOutQuad'
 	});
 
+	/*--twitterウィジェット--*/
+	var twWidget = function () {
+		$.ajax({
+			url: 'data/twitterWidget.txt',
+			timeout: 1000,
+			success: function (data) {
+				if (data.length === 0) {
+					$('.twitter-button').css({
+						'display': 'none'
+					})
+				} else {
+					var twitterWidget = $('.twitter-widget').html(data);
+				}
+			},
+			error: function () {
+				alert("Twitterの取得に失敗しました");
+			}
+		});
+	};
+	twWidget();
+
 	/*--twitterButton設定--*/
 	function leftButton() {
 		var windowH = window.innerHeight || document.documentElement.clientHeight;
-
 		var twitterButton = document.querySelector('.twitter-button');
-
 		twitterButton.style.top = 100 + 'px';
 	}
 	$(window).on('load resize orientationchange', function () {
@@ -55,71 +51,77 @@
 	});
 
 
-
-
 	/*-----注意案内の作成-----*/
 	//注意文の読み込み
-
-	$.ajax({
-		url: 'data/textInformation.txt',
-		timeout: 1000,
-		success: function (data) {
-			console.log(data)
-			if (data.length === 0) {
-				$('.fixInfo').css({
-					'display': 'none'
-				})
-			} else {
-				$('.fixInfo').append(data);
-				fixInfo();
+	var textInfo = function () {
+		$.ajax({
+			url: 'data/textInformation.txt',
+			timeout: 1000,
+			success: function (data) {
+				console.log(data)
+				if (data.length === 0) {
+					$('.fixInfo').css({
+						'display': 'none'
+					});
+					$('body').css({
+						'padding-bottom': '0'
+					});
+				} else {
+					$('.fixInfo').append(data);
+					fixInfo();
+				}
+			},
+			error: function () {
+				alert("「お知らせ」の取得に失敗しました");
 			}
-		},
-		error: function () {
-			alert("「お知らせ」の取得に失敗しました");
+		});
+
+		$(window).on('load resize orientationchange', function () {
+			fixInfo();
+		});
+
+		$(window).on('scroll', function () {
+			scrollInfo();
+		});
+
+		var firstH = 300;
+		var fixH = 140;
+		var fixContent = document.querySelector('.fixInfo');
+		var windowH = window.innerHeight || document.documentElement.clientHeight;
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		fixContent.style.height = firstH + 'px';
+		fixContent.style.top = windowH - firstH + 'px';
+		document.querySelector('body').style.paddingBottom = fixH - 70 + 'px';
+
+		function fixInfo() {
+			$('.fixInfo').animate({
+				height: fixH,
+				top: windowH + scrollTop + 70 - fixH + 'px'
+			}, 3000, 'easeInQuart');
 		}
-	});
 
-	$(window).on('load resize orientationchange', function () {
-		fixInfo();
-	});
-
-	$(window).on('scroll', function () {
-		scrollInfo();
-	});
-
-	var firstH = 300;
-	var fixH = 140;
-	var fixContent = document.querySelector('.fixInfo');
-	var windowH = window.innerHeight || document.documentElement.clientHeight;
-	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-	fixContent.style.height = firstH + 'px';
-	fixContent.style.top = windowH - firstH + 'px';
-	document.querySelector('body').style.paddingBottom = fixH - 70 + 'px';
-
-	function fixInfo() {
-		$('.fixInfo').animate({
-			height: fixH,
-			top: windowH + scrollTop + 70 - fixH + 'px'
-		}, 3000, 'easeInQuart');
-	}
-
-	function scrollInfo() {
-		fixContent.style.top = windowH + scrollTop + 70 - fixH + 'px';
-	}
+		function scrollInfo() {
+			fixContent.style.top = windowH + scrollTop + 70 - fixH + 'px';
+		}
+	};
+	textInfo();
 
 	/*--headerの縮小--*/
-	// スクロールして何ピクセルでアニメーションさせるか
-	var px_change = 300;
-	// スクロールのイベントハンドラを登録
-	window.addEventListener('scroll', function (e) {
-		// 変化するポイントまでスクロールしたらクラスを追加
-		if ($(window).scrollTop() > px_change) {
-			$("header").addClass("smaller");
-			// 変化するポイント以前であればクラスを削除
-		} else if ($("header").hasClass("smaller")) {
-			$("header").removeClass("smaller");
-		}
-	});
+	var headerChange = function () {
+		// スクロールして何ピクセルでアニメーションさせるか
+		var px_change = 300;
+		// スクロールのイベントハンドラを登録
+		window.addEventListener('scroll', function (e) {
+			// 変化するポイントまでスクロールしたらクラスを追加
+			if ($(window).scrollTop() > px_change) {
+				$("header").addClass("smaller");
+				// 変化するポイント以前であればクラスを削除
+			} else if ($("header").hasClass("smaller")) {
+				$("header").removeClass("smaller");
+			}
+		});
+	};
+	headerChange();
 
 	/*--基本設定--*/
 	//イベントの日時
@@ -212,11 +214,11 @@
 
 		/*--headerの高さ設定--*/
 		var siteTitle = document.querySelector('.header_siteTitle');
-		var mainImgArea = document.querySelector('.mainImg')
+		var mainImgArea = document.querySelector('.mainImg');
 		var headerHeight = siteTitle.offsetHeight;
 		mainImgArea.style.paddingTop = headerHeight + 20 + 'px';
 
-		console.log(headerHeight);
+
 		//雨天時の注意
 		if (data[1][4]) {
 			var caution = document.createElement('div');
@@ -233,6 +235,7 @@
 			document.querySelector('.home_date').appendChild(eventDescription);
 		}
 	});
+
 	/*--イベントスケジュールの作成--*/
 	//アクセス
 	csvToArray('data/access.csv', function (data) {
@@ -250,6 +253,7 @@
 			divPlace.innerHTML = data[i][0];
 			placeArea.appendChild(divPlace);
 		}
+
 		//交通
 		if (data[j][1]) {
 			var homeArea = document.querySelector('.home');
@@ -274,6 +278,7 @@
 			}
 		}
 	});
+
 	//注意
 	csvToArray('data/caution.csv', function (data) {
 		var dataLen = data.length;
@@ -296,7 +301,8 @@
 				cautionUl.appendChild(cautionLi);
 			}
 		}
-	})
+	});
+
 	//イベントのお知らせ
 	csvToArray('data/event-info.csv', function (data) {
 		var dataLen = data.length;
@@ -329,8 +335,8 @@
 	var tabParentDiv = document.createElement('div');
 	tabParentDiv.classList.add('tab-content');
 	eventSection.appendChild(tabParentDiv);
-	//イベントデータを読み込む
 
+	//イベントデータを読み込む
 	csvToArray('data/event-1.csv', function (data) {
 		var k = 1;
 		if (data[0][0]) {
@@ -345,7 +351,6 @@
 			}
 		});
 	});
-
 
 
 	//主催・後援・協力・協賛
@@ -567,7 +572,6 @@
 		}
 	}
 
-
 	//CSVを配列にする
 	function csvToArray(filename, cb) {
 		$.get(filename, function (csvdata, status) {
@@ -589,7 +593,5 @@
 			cb(ret);
 		});
 	}
-
-
 
 }());
